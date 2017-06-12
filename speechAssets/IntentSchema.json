@@ -10,6 +10,14 @@
 	}, {
 		"intent": "HPFactsIntent"
 	}, {
+		"intent": "HPCharIntent", 
+		"slots": [
+			{
+				"name": "HPCharacter",
+				"type": "LIST_OF_HPCHARACTERS"
+			}
+		]
+	}, {
 		"intent" : "AMAZON.YesIntent"
 	}, {
 		"intent" : "AMAZON.NoIntent"
