@@ -2,7 +2,10 @@ HPBooksIntent {HPBook}
 HPBooksIntent tell me about {HPBook}
 HPBooksIntent what is {HPBook} about
 HPBooksIntent which book is {HPBook}
+HPFactsIntent harry potter
 HPFactsIntent tell me about the harry potter books 
 HPFactsIntent who wrote the harry potter books 
+HPFactsIntent what is harry potter 
+HPCharIntent who is {HPCharacter}
 
 
