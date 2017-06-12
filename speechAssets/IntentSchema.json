@@ -8,6 +8,8 @@
 			}
 		]
 	}, {
+		"intent": "HPFactsIntent"
+	}, {
 		"intent" : "AMAZON.YesIntent"
 	}, {
 		"intent" : "AMAZON.NoIntent"
