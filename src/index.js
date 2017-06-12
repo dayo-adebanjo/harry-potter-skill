@@ -1,39 +1,4 @@
-/*var Alexa = require('alexa-sdk');
-
-exports.handler = function(event, context, callback){
-    var alexa = Alexa.handler(event, context, callback);
-};*/
-
-var hp_books = {
-    "harry potter and the sorcerers stone" : {
-        "description": "In this book, Harry discovers he is a wizard and heads to Hogwarts for the first time",
-        "series_num": "first" 
-    }, 
-    "harry potter and the chamber of secrets" : {
-        "description": "In this book, Harry heads back to Hogwarts for his second year, where mysterious things are stirring",
-        "series_num": "second" 
-    }, 
-    "harry potter and the prizoner of azkaban" : {
-        "description": "In this book, Hogwarts is shaken by the mysterious tales of a Sirius Black, the escaped convict",
-        "series_num": "third" 
-    }, 
-    "harry potter and the goblet of fire" : {
-        "description": "In this book, Harry fights for his life in the Triwizard Tournament, a dangerous competition he has been unwillingly thrown into",
-        "series_num": "fourth" 
-    }, 
-    "harry potter and the order of the phoenix" : {
-        "description": "In this book, Harry butts heads with the new and arguably insane Dolores Umbridge",
-        "series_num": "fifth" 
-    }, 
-    "harry potter and the half blood prince" : {
-        "description": "In this book, Harry finds a mysterious textbook and delves into the ast of his greatest enemy",
-        "series_num": "sixth" 
-    }, 
-    "harry potter and the deathly hallows" : {
-        "description": "This is the last book. I don't want to ruin it for you. You should maybe buy it.",
-        "series_num": "seventh" 
-    }, 
-}
+var facts = require('./facts');
 
 
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -98,6 +63,8 @@ function onIntent(intentRequest, session, callback) {
         handleHPBooksResponse(intent, session, callback)
     } else if (intentName == "HPFactsIntent") {
         handleHPFactsResponse(intent, session, callback)
+    } else if (intentName == "HPCharIntent") {
+        handleHPCharResponse(intent, session, callback)
     } else if (intentName == "AMAZON.YesIntent") {
         handleYesResponse(intent, session, callback)
     } else if (intentName == "AMAZON.NoIntent") {
@@ -145,13 +112,13 @@ function handleHPBooksResponse(intent, session, callback) {
 
     var hpBook = intent.slots.HPBook.value.toLowerCase()
 
-    if (!hp_books[hpBook]) {
+    if (!facts.hp_books[hpBook]) {
         var speechOutput = "That doesn't seem to be a Harry Potter book. Try another."
         var repromptText = "Try another book."
         var header = "Not a Harry Potter book"
     } else {
-        var description = hp_books[hpBook].description
-        var series_num = hp_books[hpBook].series_num
+        var description = facts.hp_books[hpBook].description
+        var series_num = facts.hp_books[hpBook].series_num
         var speechOutput = hpBook + " is the " + series_num + " book in the Harry Potter series. " + description +
         ". Do you want to hear about another book?"    
         var repromptText = "Do you want to hear about another book?"
@@ -169,6 +136,28 @@ function handleHPFactsResponse(intent, session, callback) {
     "There are seven books in the series. Which would you like to hear about?" 
     var repromptText = "Which book would you like to hear about?"
     var header = "Harry Potter Introductions"
+
+    var shouldEndSession = false
+
+    callback(session.attributes, buildSpeechletResponse(header, speechOutput, repromptText, shouldEndSession))
+
+}
+
+function handleHPCharResponse(intent, session, callback) {
+    
+    var hpChar = intent.slots.HPCharacter.value.toLowerCase()
+
+    if (!facts.hp_chars[hpChar]) {
+        var speechOutput = "This person doesn't seem to be in the Harry Potter books. Try someone else."
+        var repromptText = "Who would you like to hear about?"
+        var header = "Not a Harry Potter character"
+    } else {
+        var description = facts.hp_chars[hpChar].description
+        var speechOutput = hpChar + description +
+        ". Who else would you like to hear about?"    
+        var repromptText = "Do you want to hear about someone else?"
+        var header = capitalizeFirst(hpChar)
+    }
 
     var shouldEndSession = false
 
