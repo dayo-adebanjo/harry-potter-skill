@@ -6,27 +6,27 @@ exports.handler = function(event, context, callback){
 
 var hp_books = {
     "harry potter and the sorcerers stone" : {
-        "description": "In this book, Harry discovers he is a wizard and heads to Hogwarts for the first time.",
+        "description": "In this book, Harry discovers he is a wizard and heads to Hogwarts for the first time",
         "series_num": "first" 
     }, 
     "harry potter and the chamber of secrets" : {
-        "description": "In this book, Harry heads back to Hogwarts for his second year, where mysterious things are stirring.",
+        "description": "In this book, Harry heads back to Hogwarts for his second year, where mysterious things are stirring",
         "series_num": "second" 
     }, 
     "harry potter and the prizoner of azkaban" : {
-        "description": "In this book, Hogwarts is shaken by the mysterious tales of a Sirius Black, the escaped convict.",
+        "description": "In this book, Hogwarts is shaken by the mysterious tales of a Sirius Black, the escaped convict",
         "series_num": "third" 
     }, 
     "harry potter and the goblet of fire" : {
-        "description": "In this book, Harry fights for his life in the Triwizard Tournament, a dangerous competition he has been unwillingly thrown into.",
+        "description": "In this book, Harry fights for his life in the Triwizard Tournament, a dangerous competition he has been unwillingly thrown into",
         "series_num": "fourth" 
     }, 
     "harry potter and the order of the phoenix" : {
-        "description": "In this book, Harry butts heads with the new and arguably insane Dolores Umbridge.",
+        "description": "In this book, Harry butts heads with the new and arguably insane Dolores Umbridge",
         "series_num": "fifth" 
     }, 
     "harry potter and the half blood prince" : {
-        "description": "In this book, Harry finds a mysterious textbook and delves into the ast of his greatest enemy.",
+        "description": "In this book, Harry finds a mysterious textbook and delves into the ast of his greatest enemy",
         "series_num": "sixth" 
     }, 
     "harry potter and the deathly hallows" : {
@@ -42,12 +42,7 @@ exports.handler = function (event, context) {
     try {
         console.log("event.session.application.applicationId=" + event.session.application.applicationId);
 
-        /**
-         * Uncomment this if statement and populate with your skill's application ID to
-         * prevent someone else from configuring a skill that sends requests to this function.
-         */
-
-    if (event.session.application.applicationId !== "amzn-id") {
+    if (event.session.application.applicationId !== "amzn1.ask.skill.0af39cdf-0d57-4fc9-9418-cc0fb41fb3cc") {
         context.fail("Invalid Application ID");
      }
 
@@ -101,6 +96,8 @@ function onIntent(intentRequest, session, callback) {
     // dispatch custom intents to handlers here
     if (intentName == "HPBooksIntent") {
         handleHPBooksResponse(intent, session, callback)
+    } else if (intentName == "HPFactsIntent") {
+        handleHPFactsResponse(intent, session, callback)
     } else if (intentName == "AMAZON.YesIntent") {
         handleYesResponse(intent, session, callback)
     } else if (intentName == "AMAZON.NoIntent") {
@@ -145,6 +142,7 @@ function getWelcomeResponse(callback) {
 }
 
 function handleHPBooksResponse(intent, session, callback) {
+
     var hpBook = intent.slots.HPBook.value.toLowerCase()
 
     if (!hp_books[hpBook]) {
@@ -153,8 +151,9 @@ function handleHPBooksResponse(intent, session, callback) {
         var header = "Not a Harry Potter book"
     } else {
         var description = hp_books[hpBook].description
-        var series_num = hp_books[hpBook].description.series_num
-        var speechOutput = capitalizeFirst(hpBook) + " " + description + "It's the " + series_num + " book in the series. Do you want to hear about another book?"    
+        var series_num = hp_books[hpBook].series_num
+        var speechOutput = hpBook + " is the " + series_num + " book in the Harry Potter series. " + description +
+        ". Do you want to hear about another book?"    
         var repromptText = "Do you want to hear about another book?"
         var header = capitalizeFirst(hpBook)
     }
@@ -162,6 +161,19 @@ function handleHPBooksResponse(intent, session, callback) {
     var shouldEndSession = false
 
     callback(session.attributes, buildSpeechletResponse(header, speechOutput, repromptText, shouldEndSession))
+}
+
+function handleHPFactsResponse(intent, session, callback) {
+
+    var speechOutput = "Harry Potter is a series of fantasy novels written by British author JK Rowling. " +
+    "There are seven books in the series. Which would you like to hear about?" 
+    var repromptText = "Which book would you like to hear about?"
+    var header = "Harry Potter Introductions"
+
+    var shouldEndSession = false
+
+    callback(session.attributes, buildSpeechletResponse(header, speechOutput, repromptText, shouldEndSession))
+
 }
 
 function handleYesResponse(intent, session, callback) {
@@ -183,7 +195,7 @@ function handleGetHelpRequest(intent, session, callback) {
     }
 
     var speechOutput = "I can tell you about any of the Harry Potter books" +
-    " Which would you like to hear about? Remember, I can only give facts about one book at a time." 
+    "Which would you like to hear about? Remember, I can only give facts about one book at a time." 
 
     var repromptText = speechOutput
 
