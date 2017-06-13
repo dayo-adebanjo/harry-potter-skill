@@ -7,7 +7,7 @@ exports.handler = function (event, context) {
     try {
         console.log("event.session.application.applicationId=" + event.session.application.applicationId);
 
-    if (event.session.application.applicationId !== "amzn1.ask.skill.0af39cdf-0d57-4fc9-9418-cc0fb41fb3cc") {
+    if (event.session.application.applicationId !== "AMAZON_ID_HERE") {
         context.fail("Invalid Application ID");
      }
 
